@@ -2,7 +2,7 @@
   "name": "vivi-type-proxy",
   "version": "1.0.0",
   "description": "Validate data with unknown structure",
-  "author": "Andrew Pritchard <andrew@vivi.io>",
+  "author": "Vivi International",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
