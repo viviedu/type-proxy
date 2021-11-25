@@ -1,0 +1,14 @@
+FROM node:16
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean
+
+WORKDIR /workspace
+
+COPY package.json yarn.lock tsconfig.json .eslintrc.js ./
+COPY src ./src
+COPY test ./test
+COPY .buildkite/scripts/test.sh .buildkite/scripts/test.sh

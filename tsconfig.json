@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "checkJs": false,
+    "declaration": true,
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "target": "es6",
+  },
+  "include": ["src"]
+}
