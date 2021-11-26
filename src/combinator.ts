@@ -1,17 +1,5 @@
+import { pureP, TypeProxy } from '.';
 import { ParseError } from './error';
-
-export * from './error';
-export * from './primitive';
-
-export type ParseResult<T> = {
-  success: true,
-  value: T
-} | {
-  success: false,
-  error: ParseError
-};
-
-export type TypeProxy<T> = (data: unknown) => ParseResult<T>;
 
 type ObjectProxyHelper<T> = {
   [P in keyof T]: TypeProxy<T[P]>;
@@ -37,6 +25,8 @@ export const arrayP = <T>(type: TypeProxy<T>): TypeProxy<T[]> => (value) => {
 
   return { success: true, value: result };
 };
+
+export const defaultP = <T>(defaultValue: T, type: TypeProxy<T>): TypeProxy<T> => or2P(type, pureP(defaultValue));
 
 export const labelP = <T>(label: string, type: TypeProxy<T>): TypeProxy<T> => (value) => {
   const result = type(value);

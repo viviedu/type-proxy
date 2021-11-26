@@ -2,6 +2,7 @@ import { ParseError } from './error';
 
 export * from './combinator';
 export * from './error';
+export * from './functional';
 export * from './primitive';
 
 export type ParseResult<T> = {
