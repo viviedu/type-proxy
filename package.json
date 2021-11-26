@@ -1,9 +1,10 @@
 {
-  "name": "vivi-type-proxy",
-  "version": "1.0.0",
+  "name": "type-proxy",
+  "version": "1.0.1",
   "description": "Validate data with unknown structure",
   "author": "Vivi International",
-  "private": true,
+  "license": "MIT",
+  "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
