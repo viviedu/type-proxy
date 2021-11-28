@@ -1,7 +1,7 @@
 /* global describe, it */
 
 const assert = require('assert');
-const { arrayP, numberP, stringP, strLiteralP, objectP, orP } = require('../dist/index');
+const { arrayP, booleanP, numberP, numLiteralP, stringP, strLiteralP, objectP, orP } = require('../dist/index');
 
 describe('Type Proxies', () => {
   it('should parse simple expressions', () => {
@@ -55,5 +55,40 @@ describe('Type Proxies', () => {
     x[4] = 43;
     assert.deepStrictEqual(parserP(x).value, x);
     assert.deepStrictEqual(parserP([1, 2, 3, 4, 'hello']).success, false);
+  });
+
+  it('should parse objects', () => {
+    const nestedP = objectP({
+      e: strLiteralP('hello'),
+      f: numLiteralP(2)
+    });
+
+    const myStructP = objectP({
+      a: stringP,
+      b: numberP,
+      c: arrayP(booleanP),
+      d: nestedP,
+    });
+
+    const data = JSON.parse(`
+      {
+        "a": "type proxies",
+        "b": 42,
+        "c": [true, false],
+        "d": { "e": "hello", "f": 2 }
+      }
+    `);
+
+    assert(myStructP(data).success);
+
+    assert.equal(
+      myStructP({
+        a: 'type proxies',
+        b: 42,
+        c: [true, false],
+        d: { e: 'goodbye', f: 2 }
+      }).success,
+      false
+    );
   });
 });

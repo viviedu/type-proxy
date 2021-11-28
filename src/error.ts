@@ -44,8 +44,7 @@ export class ParseError {
   display(indentation = 0) {
     const indentString = '  '.repeat(indentation);
     const prettyPath = ['data', ...this.path].join('.');
-    const prettyLabels = this.errors.map((error) => error.label).join(', ');
-    const lines = [`${indentString}${prettyPath} is invalid. We expected ${prettyLabels} but found ${this.prettyReceived()} instead.`];
+    const lines = [`${indentString}${prettyPath} is invalid. ${this.prettyExpectedString()}`];
 
     this.errors.forEach((error) => {
       if (error.cause !== null) {
@@ -80,6 +79,21 @@ export class ParseError {
     }
 
     return 0;
+  }
+
+  private prettyExpectedString() {
+    if (this.errors.length === 0) {
+      return `We found ${this.prettyReceived()}.`;
+    }
+
+    if (this.errors.length === 1) {
+      return `We expected ${this.errors[0].label} but found ${this.prettyReceived()} instead.`;
+    }
+
+    const errors = [...this.errors];
+    const lastLabel = errors.pop()?.label ?? '';
+    const labels = errors.map((error) => error.label).join(', ');
+    return `We expected ${labels} or ${lastLabel} but found ${this.prettyReceived()} instead.`;
   }
 
   private prettyReceived() {

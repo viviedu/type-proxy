@@ -8,7 +8,9 @@ RUN apt-get update && \
 
 WORKDIR /workspace
 
-COPY package.json yarn.lock tsconfig.json .eslintrc.js ./
+COPY package.json yarn.lock ./
+RUN yarn
+COPY tsconfig.json .eslintrc.js ./
 COPY src ./src
 COPY test ./test
 COPY .buildkite/scripts/test.sh .buildkite/scripts/test.sh

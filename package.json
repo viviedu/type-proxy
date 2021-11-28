@@ -8,8 +8,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "yarn run eslint . && yarn run tsc",
-    "test": "yarn run build && yarn run mocha",
+    "build": "eslint . && tsc",
+    "test": "yarn build && mocha",
     "prepare": "tsc"
   },
   "files": [

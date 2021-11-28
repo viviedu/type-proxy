@@ -22,7 +22,7 @@ export const numberP: TypeProxy<number> = (value) => {
 export const numLiteralP = <K extends number>(literal: K): TypeProxy<K> => {
   return (value) => value === literal
     ? { success: true, value: value as K }
-    : { success: false, error: ParseError.simpleError(value, `"${literal}"`) };
+    : { success: false, error: ParseError.simpleError(value, `${literal}`) };
 };
 
 export const stringP: TypeProxy<string> = (value) => {

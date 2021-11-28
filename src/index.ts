@@ -14,3 +14,5 @@ export type ParseResult<T> = {
 };
 
 export type TypeProxy<T> = (data: unknown) => ParseResult<T>;
+
+export type GetType<T extends TypeProxy<unknown>> = T extends TypeProxy<infer R> ? R : never;
