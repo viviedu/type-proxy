@@ -1,5 +1,7 @@
 # `type-proxy`
 
+Copyright 2021 Vivi International (MIT)
+
 Validate unknown data types using a low overhead syntax.
 
 ## Quickstart
@@ -38,7 +40,7 @@ const myStructP = objectP({
 });
 ```
 
-You get data validation for free. Type proxies can be used in plain javascript without any trouble:
+You get data validation for free. Type proxies can be used in plain JavaScript without any trouble:
 
 ```typescript
 // Returns the following:
@@ -73,7 +75,7 @@ const result = myStructP({
 console.log(result.error.display())
 ```
 
-Typescript users can derive their types from the proxies for free:
+TypeScript users can derive their types from the proxies for free:
 
 ```typescript
 import { GetType } from 'type-proxy';
@@ -89,32 +91,32 @@ When writing some program, frequently, we come accross data that is of an unknow
 
 ```typescript
 interface MyStruct {
-    a: number,
-    b: string
+  a: number,
+  b: string
 }
 
 const validate = (data: unknown): MyStruct | null => {
-    if (typeof data !== 'object' || data === null) {
-        return null;
-    }
+  if (typeof data !== 'object' || data === null) {
+    return null;
+  }
 
-    if (typeof (data as { a: unknown}).a !== 'number') {
-        return null;
-    }
+  if (typeof (data as { a: unknown}).a !== 'number') {
+    return null;
+  }
 
-    if (typeof (data as { b: unknown}).b !== 'string') {
-        return null;
-    }
+  if (typeof (data as { b: unknown}).b !== 'string') {
+    return null;
+  }
 
-    return data as MyStruct;
+  return data as MyStruct;
 }
 ```
 
-This ad hoc strategy is tedious and verbose. In typescript is often calls for lots of casts, which can often make it relatively unsafe. Instead of writing out the validation function every time, it would be nice to derive the validation function from the interface declaration.
+This ad hoc strategy is tedious and verbose. In TypeScript this often calls for lots of casts, which can often make it relatively unsafe. Instead of writing out the validation function every time, it would be nice to derive the validation function from the interface declaration.
 
 ## Description
 
-The `type-proxy` package allows you to derive a validation function for free. At it's simplest a validation function takes some unknown data and returns a value of the type you want to validate:
+The `type-proxy` package allows you to derive a validation function for free. At its simplest a validation function takes some unknown data and returns a value of the type you want to validate:
 
 ```typescript
 type Validator<X> = (data: unknown) => X | null;
