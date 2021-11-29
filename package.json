@@ -1,6 +1,6 @@
 {
   "name": "type-proxy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Validate data with unknown structure",
   "author": "Vivi International",
   "license": "MIT",
