@@ -10,5 +10,6 @@ WORKDIR /workspace
 
 COPY package.json yarn.lock tsconfig.json .eslintrc.js ./
 COPY src ./src
+RUN yarn
 COPY test ./test
 COPY .buildkite/scripts/test.sh .buildkite/scripts/test.sh
