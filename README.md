@@ -1,7 +1,5 @@
 # `type-proxy`
 
-Copyright 2021 Vivi International (MIT)
-
 Validate unknown data types using a low overhead syntax.
 
 ## Quickstart
@@ -155,3 +153,9 @@ emitter.on('event', (data) => {
 // Poorly typed external APIs
 const data = functionThatReturnsAny();
 ```
+
+## License
+
+This project has been published under the MIT License.
+
+See the LICENSE file for more information.
