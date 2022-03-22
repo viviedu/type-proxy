@@ -106,3 +106,12 @@ export const or4P = <A, B, C, D>(
 ): TypeProxy<A | B | C | D> => {
   return or2P(or2P(first, second), or2P(third, fourth));
 };
+
+export const validate = <T>(value: unknown, type: TypeProxy<T>): T => {
+  const result = type(value);
+  if (!result.success) {
+    throw new Error(result.error.display());
+  }
+
+  return result.value;
+};

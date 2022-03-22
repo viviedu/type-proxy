@@ -1,7 +1,19 @@
 /* global describe, it */
 
 const assert = require('assert');
-const { arrayP, booleanP, numberP, numLiteralP, stringP, strLiteralP, objectP, orP } = require('../dist/index');
+const {
+  arrayP,
+  booleanP,
+  labelP,
+  numberP,
+  numLiteralP,
+  stringP,
+  strLiteralP,
+  objectP,
+  orP,
+  or3P,
+  validate
+} = require('../dist/index');
 
 describe('Type Proxies', () => {
   it('should parse simple expressions', () => {
@@ -90,5 +102,47 @@ describe('Type Proxies', () => {
       }).success,
       false
     );
+  });
+
+  it('validate should throw an error when a parse fails', () => {
+    const string = validate('hello', stringP);
+    assert(string === 'hello');
+
+    assert.throws(
+      () => validate(3, stringP),
+      (error) => error.message === 'data is invalid. We expected a string but found 3 instead.'
+    );
+  });
+
+  it('label changes the error message', () => {
+    const noLabel = numLiteralP(1809);
+    assert.equal(noLabel(2022).success, false);
+    assert(noLabel(2022).error.display().includes('data is invalid. We expected Araham Lincoln\'s birthday but found 2022 instead.') === false);
+
+    const validator = labelP('Araham Lincoln\'s birthday', numLiteralP(1809));
+    assert.equal(validator(2022).success, false);
+    assert(validator(2022).error.display().includes('data is invalid. We expected Araham Lincoln\'s birthday but found 2022 instead.'));
+
+    const unionP = or3P(
+      labelP('a number type', objectP({
+        type: strLiteralP('number'),
+        number: numberP
+      })),
+      labelP('a string type', objectP({
+        type: strLiteralP('string'),
+        string: stringP
+      })),
+      labelP(' a boolean type', objectP({
+        type: strLiteralP('boolean'),
+        boolean: booleanP
+      }))
+    );
+
+    const result = unionP({ type: 'number', string: 'hello' });
+    assert.equal(result.success, false);
+  });
+
+  it('supports generic types', () => {
+
   });
 });
