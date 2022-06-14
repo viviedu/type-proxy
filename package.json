@@ -1,6 +1,6 @@
 {
   "name": "type-proxy",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Validate data with unknown structure",
   "author": "Vivi International",
   "homepage": "https://github.com/viviedu/type-proxy",
