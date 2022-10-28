@@ -27,6 +27,11 @@ export const arrayP = <T>(type: TypeProxy<T>): TypeProxy<T[]> => (value) => {
   return { success: true, value: result };
 };
 
+export const composeP = <A,B>(first: TypeProxy<A>, second: TypeProxy<B>): TypeProxy<B> => (value) => {
+  const result = first(value);
+  return result.success ? second(result.value) : result;
+};
+
 export const defaultP = <T>(defaultValue: T, type: TypeProxy<T>): TypeProxy<T> => or2P(type, pureP(defaultValue));
 
 export const labelP = <T>(label: string, type: TypeProxy<T>): TypeProxy<T> => (value) => {
