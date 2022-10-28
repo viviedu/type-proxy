@@ -3,10 +3,7 @@ import { ParseError, TypeProxy, labelP, stringP } from '.';
 export const jsonP: TypeProxy<unknown> = (value) => {
   const result = labelP('JSON string', stringP)(value);
   if (!result.success) {
-    return {
-      error: result.error,
-      success: false
-    };
+    return result;
   }
 
   try {
