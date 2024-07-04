@@ -6,6 +6,50 @@ type ObjectProxyHelper<T> = {
   [P in keyof T]: TypeProxy<T[P]>;
 };
 
+export const and2P = <A, B>(left: TypeProxy<A>, right: TypeProxy<B>): TypeProxy<A & B> => (value) => {
+  const leftResult = left(value);
+  if (!leftResult.success) {
+    return leftResult;
+  }
+
+  const rightResult = right(value);
+  if (!rightResult.success) {
+    return rightResult;
+  }
+
+  return {
+    success: true,
+    value: value as A & B
+  };
+};
+
+export const and3P = <A, B, C>(
+  first: TypeProxy<A>,
+  second: TypeProxy<B>,
+  third: TypeProxy<C>
+): TypeProxy<A & B & C> => {
+  return and2P(first, and2P(second, third));
+};
+
+export const and4P = <A, B, C, D>(
+  first: TypeProxy<A>,
+  second: TypeProxy<B>,
+  third: TypeProxy<C>,
+  fourth: TypeProxy<D>
+): TypeProxy<A & B & C & D> => {
+  return and2P(and2P(first, second), and2P(third, fourth));
+};
+
+export const and5P = <A, B, C, D, E>(
+  first: TypeProxy<A>,
+  second: TypeProxy<B>,
+  third: TypeProxy<C>,
+  fourth: TypeProxy<D>,
+  fifth: TypeProxy<E>
+): TypeProxy<A & B & C & D & E> => {
+  return and2P(and2P(first, second), and3P(third, fourth, fifth));
+};
+
 export const arrayP = <T>(type: TypeProxy<T>): TypeProxy<T[]> => (value) => {
   if (!Array.isArray(value)) {
     return { success: false, error: ParseError.simpleError(value, 'an array') };
