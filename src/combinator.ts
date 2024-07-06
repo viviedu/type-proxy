@@ -1,6 +1,6 @@
-import { pureP, TypeProxy } from '.';
 import { ParseError } from './error';
 import { nullP, undefinedP } from './primitive';
+import { pureP, TypeProxy } from '.';
 
 type ObjectProxyHelper<T> = {
   [P in keyof T]: TypeProxy<T[P]>;
@@ -60,7 +60,7 @@ export const arrayP = <T>(type: TypeProxy<T>): TypeProxy<T[]> => (value) => {
   for (const index in value) {
     const fieldResult = type(value[index]);
     if (!fieldResult.success) {
-      const error = fieldResult.error;
+      const { error } = fieldResult;
       error.prefix(index);
       return { success: false, error };
     }
@@ -71,7 +71,7 @@ export const arrayP = <T>(type: TypeProxy<T>): TypeProxy<T[]> => (value) => {
   return { success: true, value: result };
 };
 
-export const composeP = <A,B>(first: TypeProxy<A>, second: TypeProxy<B>): TypeProxy<B> => (value) => {
+export const composeP = <A, B>(first: TypeProxy<A>, second: TypeProxy<B>): TypeProxy<B> => (value) => {
   const result = first(value);
   return result.success ? second(result.value) : result;
 };

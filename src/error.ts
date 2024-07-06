@@ -7,7 +7,7 @@ export class ParseError {
   private static MAX_RECEIVED_LENGTH = 50;
 
   private errors: FieldError[];
-  private path : string[];
+  private path: string[];
   private received: unknown;
 
   static label(label: string, cause: ParseError) {
