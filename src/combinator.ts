@@ -167,6 +167,17 @@ export const or5P = <A, B, C, D, E>(
   return or2P(or2P(first, second), or3P(third, fourth, fifth));
 };
 
+export const or6P = <A, B, C, D, E, F>(
+  first: TypeProxy<A>,
+  second: TypeProxy<B>,
+  third: TypeProxy<C>,
+  fourth: TypeProxy<D>,
+  fifth: TypeProxy<E>,
+  sixth: TypeProxy<F>
+): TypeProxy<A | B | C | D | E | F> => {
+  return or2P(or3P(first, second, third), or3P(fourth, fifth, sixth));
+};
+
 export const optionalP = <T>(type: TypeProxy<T>) => or2P(undefinedP, type);
 
 export const validate = <T>(value: unknown, type: TypeProxy<T>): T => {
