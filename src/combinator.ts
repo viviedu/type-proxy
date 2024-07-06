@@ -1,6 +1,6 @@
 import { pureP, TypeProxy } from '.';
 import { ParseError } from './error';
-import { undefinedP } from './primitive';
+import { nullP, undefinedP } from './primitive';
 
 type ObjectProxyHelper<T> = {
   [P in keyof T]: TypeProxy<T[P]>;
@@ -83,6 +83,10 @@ export const labelP = <T>(label: string, type: TypeProxy<T>): TypeProxy<T> => (v
   return result.success === true
     ? result
     : { success: false, error: ParseError.label(label, result.error) };
+};
+
+export const nullableP = <T>(type: TypeProxy<T>): TypeProxy<T | null> => {
+  return or2P(type, nullP);
 };
 
 export const objectP = <T>(type: ObjectProxyHelper<T>): TypeProxy<T> => (value) => {
