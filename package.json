@@ -9,7 +9,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "eslint . && tsc",
+    "build": "yarn lint && tsc",
+    "lint": "eslint src --max-warnings 0",
+    "lint:fix": "eslint src --max-warnings 0 --fix",
     "test": "yarn build && mocha --require ts-node/register test/**/*.ts test/**/*.js",
     "prepare": "tsc"
   },
@@ -21,7 +23,9 @@
     "@types/node": "^18.11.5",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "eslint": "^8.3.0",
+    "eslint": "^8.38.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
     "mocha": "^10.1.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.5.2"

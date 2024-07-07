@@ -1,6 +1,6 @@
-import { pureP, TypeProxy } from '.';
 import { ParseError } from './error';
-import { undefinedP } from './primitive';
+import { nullP, undefinedP } from './primitive';
+import { pureP, TypeProxy } from '.';
 
 type ObjectProxyHelper<T> = {
   [P in keyof T]: TypeProxy<T[P]>;
@@ -60,7 +60,7 @@ export const arrayP = <T>(type: TypeProxy<T>): TypeProxy<T[]> => (value) => {
   for (const index in value) {
     const fieldResult = type(value[index]);
     if (!fieldResult.success) {
-      const error = fieldResult.error;
+      const { error } = fieldResult;
       error.prefix(index);
       return { success: false, error };
     }
@@ -71,7 +71,7 @@ export const arrayP = <T>(type: TypeProxy<T>): TypeProxy<T[]> => (value) => {
   return { success: true, value: result };
 };
 
-export const composeP = <A,B>(first: TypeProxy<A>, second: TypeProxy<B>): TypeProxy<B> => (value) => {
+export const composeP = <A, B>(first: TypeProxy<A>, second: TypeProxy<B>): TypeProxy<B> => (value) => {
   const result = first(value);
   return result.success ? second(result.value) : result;
 };
@@ -83,6 +83,10 @@ export const labelP = <T>(label: string, type: TypeProxy<T>): TypeProxy<T> => (v
   return result.success === true
     ? result
     : { success: false, error: ParseError.label(label, result.error) };
+};
+
+export const nullableP = <T>(type: TypeProxy<T>): TypeProxy<T | null> => {
+  return or2P(type, nullP);
 };
 
 export const objectP = <T>(type: ObjectProxyHelper<T>): TypeProxy<T> => (value) => {
@@ -165,6 +169,17 @@ export const or5P = <A, B, C, D, E>(
   fifth: TypeProxy<E>
 ): TypeProxy<A | B | C | D | E> => {
   return or2P(or2P(first, second), or3P(third, fourth, fifth));
+};
+
+export const or6P = <A, B, C, D, E, F>(
+  first: TypeProxy<A>,
+  second: TypeProxy<B>,
+  third: TypeProxy<C>,
+  fourth: TypeProxy<D>,
+  fifth: TypeProxy<E>,
+  sixth: TypeProxy<F>
+): TypeProxy<A | B | C | D | E | F> => {
+  return or2P(or3P(first, second, third), or3P(fourth, fifth, sixth));
 };
 
 export const optionalP = <T>(type: TypeProxy<T>) => or2P(undefinedP, type);

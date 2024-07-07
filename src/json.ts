@@ -14,7 +14,7 @@ export const jsonP: TypeProxy<unknown> = (value) => {
   } catch (error) {
     return {
       error: ParseError.simpleError(value, 'valid JSON'),
-      success: false,
+      success: false
     };
   }
 };
