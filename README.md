@@ -382,6 +382,14 @@ try {
 }
 ```
 
+## Development
+
+For local development, the library can be built with `yarn build`. This will run eslint and run the TypeScript compiler.
+
+The linter can be run independently with `yarn lint`, or `yarn lint:fix` to automatically fix some errors.
+
+Tests can be run with `yarn test`.
+
 ## License
 
 This project has been published under the MIT License.
