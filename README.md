@@ -1,4 +1,6 @@
-# `type-proxy`
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+
+# Type Proxy
 
 Validate unknown data types using a low overhead syntax.
 
@@ -85,7 +87,7 @@ interface MyStructInterface extends GetType<typeof myStructP> {}
 
 ## Description
 
-The `type-proxy` package allows you to derive a validation function for free. At its simplest a validation function takes some unknown data and returns a value of the type you want to validate:
+The `type-proxy` package allows you to derive a validation function for free. At its simplest, a validation function takes some unknown data and returns a value of the type you want to validate:
 
 ```typescript
 type Validator<X> = (data: unknown) => X | null;
@@ -109,7 +111,7 @@ A `TypeProxy` is therefore a function that takes some unknown data and validates
 
 ### Motivation
 
-When writing some program, frequently, we come accross data that is of an unknown type. This is the kind of data that usually comes from a HTTP request, a file, or some other unstructured stream of data. In order to validate that this data is correct, the traditional method of doing this is to write a validation function which often looks something like this:
+While writing web applications, we frequently come across data that is of an unknown type. This is the kind of data that usually comes from a HTTP request, a file, or some other unstructured stream of data. In order to validate that this data is correct, the traditional method is to write a validation function which often looks something like this:
 
 ```typescript
 interface MyStruct {
@@ -134,7 +136,7 @@ const validate = (data: unknown): MyStruct | null => {
 }
 ```
 
-This ad hoc strategy is tedious and verbose. In TypeScript this often calls for lots of casts, which can often make it relatively unsafe. Instead of writing out the validation function every time, it would be nice to derive the validation function from the interface declaration.
+This ad hoc strategy is tedious, verbose and error-prone. In TypeScript this often calls for lots of casts, which can often make it relatively unsafe. Instead of writing out the validation function every time, it would be nice to derive the validation function from the interface declaration.
 
 ### Use cases
 
@@ -153,6 +155,32 @@ emitter.on('event', (data) => {
 // Poorly typed external APIs
 const data = functionThatReturnsAny();
 ```
+
+### Alternatives
+
+Before you use this library, there are several alternatives that should consider using instead.
+
+These include (with their respective headlines):
+
+* [Zod](https://zod.dev/) - TypeScript-first schema validation with static type inference.
+* [Valibot](https://valibot.dev/) - Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.
+* [Yup](https://github.com/jquense/yup) - Yup is a schema builder for runtime value parsing and validation.
+
+All three are published under the [MIT License](https://opensource.org/license/mit), and are mature and well tested. Between them they have over 50 thousand stars on GitHub.
+
+**Reasons you should NOT use this library:**
+
+* **Not Invented Here (NIH)**: This library was initially developed as a minimal validation interface for use in projects at [Vivi](https://vivi.io). Despite being aware of publicly available alternatives, we decided to release this code as is.
+
+* **Test Coverage**: Test coverage is still somewhat lacking, however we hope to improve this... 🙏
+
+* **Completeness**: The alternatives listed above are arguably more complete from a type system perspective. They provide well established solutions for parsing and validating complex types.
+
+**Why you might want to use this library:**
+
+* **Compactness**: One of the advantages over alternatives is that `type-proxy` is extremely small, and light-weight. The entire API _and_ implementation can easily be explained in a short how-to session / tutorial.
+
+* **Extensibility**: The `type-proxy` API has been designed to be easy to extend and compose.
 
 ## Advanced usage
 
@@ -245,7 +273,7 @@ const linkedListP: TypeProxy<LinkedList> = (value: unknown) => or2P(
   objectP({
     value: numberP,
     next: linkedListP
-  }), 
+  }),
   nullP
 )(value);
 
@@ -266,7 +294,7 @@ const noLabel = numLiteralP(1809);
 assert.equal(noLabel(2022).success, false);
 
 // The following prints:
-// 
+//
 //  data is invalid. We expected 1809 but found 2022 instead.
 console.log(noLabel(2022).error.display());
 
@@ -327,7 +355,7 @@ const unionP = or3P(
 const result = unionP({ type: 'number', string: 'hello' });
 assert.equal(result.success, false);
 // prints the following:
-// 
+//
 // data is invalid. We expected a number type, a string type or  a boolean type but found {"type":"number","string":"hello"} instead.
 // it is not a number type because:
 //   data.number is invalid. We expected a number but found undefined instead.
