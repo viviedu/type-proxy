@@ -211,7 +211,7 @@ const pairP = <F, S>(firstP: TypeProxy<F>, secondP: TypeProxy<S>) => objectP({
   second: secondP
 });
 
-const eitherP = <L, R>(leftP: TypeProxy<L>, rightP: TypeProxy<R>) => or2P(
+const eitherP = <L, R>(leftP: TypeProxy<L>, rightP: TypeProxy<R>) => orP(
   objectP({
     type: strLiteralP('left'),
     left: leftP
@@ -257,7 +257,7 @@ type LinkedList = {
 You cannot write your type proxy like you would normally, since it will use a variable that has not yet been defined:
 
 ```typescript
-const linkedListP = or2P(
+const linkedListP = orP(
   objectP({
     value: numberP,
     next: linkedListP // Error: Block-scoped variable 'linkedListP' used before its declaration.
@@ -269,7 +269,7 @@ const linkedListP = or2P(
 You can however, write out recursive types as a function. Note that for recursive types, the type declaration is required otherwise TypeScript will not be able to resolve the type:
 
 ```typescript
-const linkedListP: TypeProxy<LinkedList> = (value: unknown) => or2P(
+const linkedListP: TypeProxy<LinkedList> = (value: unknown) => orP(
   objectP({
     value: numberP,
     next: linkedListP
@@ -312,7 +312,7 @@ console.log(WithLabel(2022).error.display());
 This is useful for when you want more descriptive error messages when describing a union. In the following example, the error message is not very useful:
 
 ```javascript
-const unionP = or3P(
+const unionP = orP(
   objectP({
     type: strLiteralP('number'),
     number: numberP
@@ -337,7 +337,7 @@ however, if we add labels to each variant, we get much better error messages:
 
 
 ```javascript
-const unionP = or3P(
+const unionP = orP(
   labelP('a number type', objectP({
     type: strLiteralP('number'),
     number: numberP

@@ -76,7 +76,7 @@ export const composeP = <A, B>(first: TypeProxy<A>, second: TypeProxy<B>): TypeP
   return result.success ? second(result.value) : result;
 };
 
-export const defaultP = <T>(defaultValue: T, type: TypeProxy<T>): TypeProxy<T> => or2P(type, pureP(defaultValue));
+export const defaultP = <T>(defaultValue: T, type: TypeProxy<T>): TypeProxy<T> => orP(type, pureP(defaultValue));
 
 export const labelP = <T>(label: string, type: TypeProxy<T>): TypeProxy<T> => (value) => {
   const result = type(value);
@@ -86,7 +86,7 @@ export const labelP = <T>(label: string, type: TypeProxy<T>): TypeProxy<T> => (v
 };
 
 export const nullableP = <T>(type: TypeProxy<T>): TypeProxy<T | null> => {
-  return or2P(type, nullP);
+  return orP(type, nullP);
 };
 
 export const objectP = <T>(type: ObjectProxyHelper<T>): TypeProxy<T> => (value) => {
@@ -111,9 +111,7 @@ export const objectP = <T>(type: ObjectProxyHelper<T>): TypeProxy<T> => (value) 
   return { success: true, value: result as T };
 };
 
-// orP tends not to have good type inference unless the options are literals. In
-// those cases use or2P, or3P etc.
-export const orP = <T>(choices: TypeProxy<T>[]): TypeProxy<T> => (value) => {
+export const orP = <T extends TypeProxy<unknown>[]>(...choices: T): T[number] => (value) => {
   let error = ParseError.empty(value);
   for (let i = 0; i < choices.length; ++i) {
     const result = choices[i](value);
@@ -127,62 +125,7 @@ export const orP = <T>(choices: TypeProxy<T>[]): TypeProxy<T> => (value) => {
   return { success: false, error };
 };
 
-export const or2P = <A, B>(left: TypeProxy<A>, right: TypeProxy<B>): TypeProxy<A | B> => (value) => {
-  const leftResult = left(value);
-  if (leftResult.success) {
-    return leftResult;
-  }
-
-  const rightResult = right(value);
-  if (rightResult.success) {
-    return rightResult;
-  }
-
-  let error = ParseError.empty(value);
-  error = error.combine(leftResult.error);
-  error = error.combine(rightResult.error);
-  return { success: false, error };
-};
-
-export const or3P = <A, B, C>(
-  first: TypeProxy<A>,
-  second: TypeProxy<B>,
-  third: TypeProxy<C>
-): TypeProxy<A | B | C> => {
-  return or2P(first, or2P(second, third));
-};
-
-export const or4P = <A, B, C, D>(
-  first: TypeProxy<A>,
-  second: TypeProxy<B>,
-  third: TypeProxy<C>,
-  fourth: TypeProxy<D>
-): TypeProxy<A | B | C | D> => {
-  return or2P(or2P(first, second), or2P(third, fourth));
-};
-
-export const or5P = <A, B, C, D, E>(
-  first: TypeProxy<A>,
-  second: TypeProxy<B>,
-  third: TypeProxy<C>,
-  fourth: TypeProxy<D>,
-  fifth: TypeProxy<E>
-): TypeProxy<A | B | C | D | E> => {
-  return or2P(or2P(first, second), or3P(third, fourth, fifth));
-};
-
-export const or6P = <A, B, C, D, E, F>(
-  first: TypeProxy<A>,
-  second: TypeProxy<B>,
-  third: TypeProxy<C>,
-  fourth: TypeProxy<D>,
-  fifth: TypeProxy<E>,
-  sixth: TypeProxy<F>
-): TypeProxy<A | B | C | D | E | F> => {
-  return or2P(or3P(first, second, third), or3P(fourth, fifth, sixth));
-};
-
-export const optionalP = <T>(type: TypeProxy<T>) => or2P(undefinedP, type);
+export const optionalP = <T>(type: TypeProxy<T>) => orP(undefinedP, type);
 
 export const validate = <T>(value: unknown, type: TypeProxy<T>): T => {
   const result = type(value);
