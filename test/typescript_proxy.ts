@@ -2,6 +2,7 @@ import * as assert from 'assert';
 import {
   GetType,
   TypeProxy,
+  arrayP,
   nullP,
   numberP,
   objectP,
@@ -75,5 +76,16 @@ describe('Type Proxies', () => {
 
     const list = { value: 1, next: { value: 2, next: { value: 3, next: null }}};
     assert(linkedListP(list).success);
+  });
+
+  it('supports orP with arrayP', () => {
+    const unionP = orP(objectP({
+      type: strLiteralP('foo')
+    }), objectP({
+      type: strLiteralP('bar')
+    }));
+
+    const arrayOfUnionP = arrayP(unionP);
+    assert(arrayOfUnionP([{ type: 'foo' }, { type: 'bar' }]).success);
   });
 });

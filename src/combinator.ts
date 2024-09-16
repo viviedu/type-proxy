@@ -1,6 +1,6 @@
 import { ParseError } from './error';
 import { nullP, undefinedP } from './primitive';
-import { pureP, TypeProxy } from '.';
+import { ParseResult, TypeProxy, pureP } from '.';
 
 type ObjectProxyHelper<T> = {
   [P in keyof T]: TypeProxy<T[P]>;
@@ -111,12 +111,15 @@ export const objectP = <T>(type: ObjectProxyHelper<T>): TypeProxy<T> => (value) 
   return { success: true, value: result as T };
 };
 
-export const orP = <T extends TypeProxy<unknown>[]>(...choices: T): T[number] => (value) => {
+type TypeOfProxy<T> = T extends TypeProxy<infer U> ? U : never;
+type UnionOfTypes<T extends TypeProxy<unknown>[]> = TypeOfProxy<T[number]>;
+
+export const orP = <T extends TypeProxy<unknown>[]>(...choices: T): TypeProxy<UnionOfTypes<T>> => (value) => {
   let error = ParseError.empty(value);
   for (let i = 0; i < choices.length; ++i) {
     const result = choices[i](value);
     if (result.success) {
-      return result;
+      return result as ParseResult<UnionOfTypes<T>>;
     }
 
     error = error.combine(result.error);
