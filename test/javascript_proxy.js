@@ -11,7 +11,6 @@ const {
   strLiteralP,
   objectP,
   orP,
-  or3P,
   validate
 } = require('../dist/index');
 
@@ -28,7 +27,7 @@ describe('Type Proxies', () => {
     );
 
     assert.deepStrictEqual(
-      orP([strLiteralP('one'), strLiteralP('two'), strLiteralP('three')])(
+      orP(strLiteralP('one'), strLiteralP('two'), strLiteralP('three'))(
         'two'
       ),
       { success: true, value: 'two' }
@@ -44,11 +43,11 @@ describe('Type Proxies', () => {
       a: objectP({
         b: objectP({
           c: objectP({
-            d: orP([
+            d: orP(
               strLiteralP('one'),
               strLiteralP('two'),
               strLiteralP('three'),
-            ])
+            )
           })
         })
       })
@@ -123,7 +122,7 @@ describe('Type Proxies', () => {
     assert.equal(validator(2022).success, false);
     assert(validator(2022).error.display().includes('data is invalid. We expected Araham Lincoln\'s birthday but found 2022 instead.'));
 
-    const unionP = or3P(
+    const unionP = orP(
       labelP('a number type', objectP({
         type: strLiteralP('number'),
         number: numberP

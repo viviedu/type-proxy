@@ -5,7 +5,7 @@ import {
   nullP,
   numberP,
   objectP,
-  or2P,
+  orP,
   strLiteralP,
   stringP
 } from '../dist/index';
@@ -30,7 +30,7 @@ describe('Type Proxies', () => {
       second: secondP
     });
 
-    const eitherP = <L, R>(leftP: TypeProxy<L>, rightP: TypeProxy<R>) => or2P(
+    const eitherP = <L, R>(leftP: TypeProxy<L>, rightP: TypeProxy<R>) => orP(
       objectP({
         type: strLiteralP('left'),
         left: leftP
@@ -65,7 +65,7 @@ describe('Type Proxies', () => {
       next: LinkedList
     } | null;
 
-    const linkedListP: TypeProxy<LinkedList> = (value: unknown) => or2P(
+    const linkedListP: TypeProxy<LinkedList> = (value: unknown) => orP(
       objectP({
         value: numberP,
         next: linkedListP
