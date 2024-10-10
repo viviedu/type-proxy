@@ -299,8 +299,10 @@ const data = {
   email_address: 'foo@example.com',
 };
 
-assert(userP(data).success);
-assert(userP(data).value.userName);
+const result = userP(data);
+
+assert(result.success);
+assert(result.value.userName);
 ```
 
 ## API

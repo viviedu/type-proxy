@@ -7,7 +7,7 @@ type ProxyHelper<T> = {
 // a guarded version of hasOwnProperty
 const hasProperty = <ObjectType, Key extends PropertyKey>(object: ObjectType, key: Key): object is (ObjectType & Record<Key, unknown>) => {
   return Object.prototype.hasOwnProperty.call(object, key);
-}
+};
 
 const snakeCaseObjectHelper = <T extends Record<string, unknown>>(type: ProxyHelper<T>, data: unknown): T => {
   const errors: ParseError[] = [];
@@ -48,7 +48,7 @@ const snakeCaseObjectHelper = <T extends Record<string, unknown>>(type: ProxyHel
   throw combinedError;
 };
 
-export const snakeCaseObjectP = <T extends {}>(type: ProxyHelper<T>): TypeProxy<T> => (data: unknown) => {
+export const snakeCaseObjectP = <T extends Record<string, unknown>>(type: ProxyHelper<T>): TypeProxy<T> => (data: unknown) => {
   try {
     if (typeof data !== 'object' || data === null) {
       // If data is not an object, but all the individual fields have defaults, then
