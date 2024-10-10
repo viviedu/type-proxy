@@ -5,6 +5,7 @@ export * from './error';
 export * from './functional';
 export * from './json';
 export * from './primitive';
+export * from './transform';
 
 export type ParseResult<T> = {
   success: true,
