@@ -281,6 +281,28 @@ const list = { value: 1, next: { value: 2, next: { value: 3, next: null }}};
 assert(linkedListP(list).success);
 ```
 
+### Transforms
+
+Some experimental support for object transforms has been included.
+
+An example of this is `snakeCaseObjectP`. This can be used to parse a payload that contains [`snake_case`](https://en.wikipedia.org/wiki/Snake_case) keys, while returning a type that includes those keys as specified in a type proxy. `snakeCaseObjectP` is designed to be used in place of `objectP`.
+
+Example:
+```typescript
+const userP = snakeCaseObjectP({
+  userName: stringP,
+  emailAddress: stringP
+});
+
+const data = {
+  user_name: 'Foo',
+  email_address: 'foo@example.com',
+};
+
+assert(userP(data).success);
+assert(userP(data).value.userName);
+```
+
 ## API
 
 This section is incomplete. Please raise an issue on GitHub if you would like something to be added.
