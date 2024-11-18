@@ -1,4 +1,4 @@
-// this functions signifies code that is never executed. Typescript should
+// this functions signifies code that is never executed. TypeScript should
 // not allow this function to be in any real execution path at compile time.
 // see test file for example usage.
 export const unreachable = function (x: never): never {
