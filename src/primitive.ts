@@ -7,6 +7,12 @@ export const booleanP: TypeProxy<boolean> = (value) => {
     : { success: false, error: ParseError.simpleError(value, 'a boolean') };
 };
 
+export const dateP: TypeProxy<Date> = (data) => {
+  return (Object.prototype.toString.call(data) === '[object Date]' && data instanceof Date && !(isNaN(data.valueOf())))
+    ? { success: true, value: data }
+    : { error: ParseError.simpleError(data, 'a date'), success: false };
+};
+
 export const falseP: TypeProxy<false> = (value) => {
   return value === false
     ? { success: true, value: false }
