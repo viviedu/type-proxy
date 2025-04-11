@@ -89,7 +89,17 @@ export const nullableP = <T>(type: TypeProxy<T>): TypeProxy<T | null> => {
   return orP(type, nullP);
 };
 
-export const objectP = <T>(type: ObjectProxyHelper<T>): TypeProxy<T> => (value) => {
+type OptionalKeys<T> = {
+  [K in keyof T]: undefined extends T[K] ? K : never
+}[keyof T];
+
+type UndefinedToOptional<T extends object> = {
+  [K in Exclude<keyof T, OptionalKeys<T>>]: T[K];
+} & {
+  [K in OptionalKeys<T>]?: T[K];
+};
+
+export const objectP = <T extends object>(type: ObjectProxyHelper<T>): TypeProxy<UndefinedToOptional<T>> => (value) => {
   if (typeof value !== 'object' || value === null) {
     return { success: false, error: ParseError.simpleError(value, 'an object') };
   }
