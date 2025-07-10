@@ -3,6 +3,7 @@ import {
   GetType,
   TypeProxy,
   arrayP,
+  instanceOfP,
   nullP,
   numberP,
   objectP,
@@ -87,5 +88,11 @@ describe('Type Proxies', () => {
 
     const arrayOfUnionP = arrayP(unionP);
     assert(arrayOfUnionP([{ type: 'foo' }, { type: 'bar' }]).success);
+  });
+
+  it('instanceOfP parses a buffer correctly', () => {
+    const bufferP = instanceOfP(Buffer);
+    assert(bufferP(Buffer.alloc(0)).success);
+    assert(!bufferP(5).success);
   });
 });
