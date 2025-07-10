@@ -19,6 +19,12 @@ export const falseP: TypeProxy<false> = (value) => {
     : { success: false, error: ParseError.simpleError(value, 'false') };
 };
 
+export const instanceOfP = <T>(klass: new (...args: unknown[]) => T): TypeProxy<T> => {
+  return (value) => value instanceof klass
+    ? { success: true, value }
+    : { success: false, error: ParseError.simpleError(value, `an instance of ${klass.name}`) };
+};
+
 export const nullP: TypeProxy<null> = (value) => {
   return value === null
     ? { success: true, value }

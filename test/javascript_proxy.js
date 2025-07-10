@@ -140,8 +140,4 @@ describe('Type Proxies', () => {
     const result = unionP({ type: 'number', string: 'hello' });
     assert.equal(result.success, false);
   });
-
-  it('supports generic types', () => {
-
-  });
 });
