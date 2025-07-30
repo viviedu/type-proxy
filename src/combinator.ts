@@ -121,6 +121,28 @@ export const objectP = <T extends object>(type: ObjectProxyHelper<T>): TypeProxy
   return { success: true, value: result as T };
 };
 
+export const recordP = <V>(valueType: TypeProxy<V>): TypeProxy<Record<string, V>> => (value) => {
+  if (typeof value !== 'object' || value === null) {
+    return { success: false, error: ParseError.simpleError(value, 'an object') };
+  }
+
+  const result: Record<string, V> = {};
+
+  for (const key of Object.keys(value)) {
+    const valueToCheck = (value as Record<string, unknown>)[key];
+    const fieldResult = valueType(valueToCheck);
+    if (!fieldResult.success) {
+      const fieldError = fieldResult.error;
+      fieldError.prefix(key);
+      return { success: false, error: fieldError };
+    } else {
+      result[key] = fieldResult.value;
+    }
+  }
+
+  return { success: true, value: result };
+};
+
 type TypeOfProxy<T> = T extends TypeProxy<infer U> ? U : never;
 type UnionOfTypes<T extends TypeProxy<unknown>[]> = TypeOfProxy<T[number]>;
 
