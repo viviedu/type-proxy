@@ -7,6 +7,7 @@ const {
   labelP,
   numberP,
   numLiteralP,
+  recordP,
   stringP,
   strLiteralP,
   objectP,
@@ -101,6 +102,19 @@ describe('Type Proxies', () => {
       }).success,
       false
     );
+  });
+
+  it('should parse records', () => {
+    const numOrNumArrayRecordP = recordP(orP(numberP, arrayP(numberP)));
+
+    assert(numOrNumArrayRecordP({
+      a: 123,
+      b: [1, 2, 3]
+    }).success);
+
+    assert.equal(numOrNumArrayRecordP({
+      a: [1, 'not-a-number', 3]
+    }).success, false);
   });
 
   it('validate should throw an error when a parse fails', () => {
