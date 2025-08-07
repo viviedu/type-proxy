@@ -89,15 +89,25 @@ export const nullableP = <T>(type: TypeProxy<T>): TypeProxy<T | null> => {
   return orP(type, nullP);
 };
 
+// src: https://www.totaltypescript.com/concepts/the-prettify-helper
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & unknown;
+
+type IsUnknown<T, True=true, False=false> = T extends unknown
+  ? unknown extends T
+    ? True : False
+  : False;
+
 type OptionalKeys<T> = {
-  [K in keyof T]: undefined extends T[K] ? K : never
+  [K in keyof T]: undefined extends T[K] ? IsUnknown<T[K], never, K> : never
 }[keyof T];
 
-type UndefinedToOptional<T extends object> = {
+type UndefinedToOptional<T extends object> = Prettify<{
   [K in Exclude<keyof T, OptionalKeys<T>>]: T[K];
 } & {
   [K in OptionalKeys<T>]?: T[K];
-};
+}>;
 
 export const objectP = <T extends object>(type: ObjectProxyHelper<T>): TypeProxy<UndefinedToOptional<T>> => (value) => {
   if (typeof value !== 'object' || value === null) {
