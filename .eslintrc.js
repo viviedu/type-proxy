@@ -1,5 +1,6 @@
 const rules = {
   '@typescript-eslint/ban-ts-comment': [0],
+  '@typescript-eslint/no-explicit-any': 'off',
   '@typescript-eslint/no-unused-vars': [
     'error',
     {
