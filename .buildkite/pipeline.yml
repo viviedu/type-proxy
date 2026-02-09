@@ -2,7 +2,7 @@ steps:
   - label: ":bk-status-passed: Test"
     key: test
     agents:
-      queue: v3
+      queue: v6
     command: .buildkite/scripts/test.sh
     plugins:
       - viviedu/docker-compose#dd0a3f4:
