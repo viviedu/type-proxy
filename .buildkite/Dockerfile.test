@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:22-bullseye@sha256:d7ecd44a5983a6647565509527498f1051ba409cfe847d2ab514fd67c2d67a2a
 
 ENV DEBIAN_FRONTEND noninteractive
 

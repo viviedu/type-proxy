@@ -2,12 +2,11 @@ steps:
   - label: ":bk-status-passed: Test"
     key: test
     agents:
-      queue: v3
+      queue: v6
     command: .buildkite/scripts/test.sh
     plugins:
-      - viviedu/docker-compose#dd0a3f4:
+      - docker-compose#v5.12.1:
           config: .buildkite/docker-compose.buildkite.yml
-          build: test
           image-repository: ${GLOBAL_DOCKER_REGISTRY}/build-cache
           image-name: ${BUILDKITE_PIPELINE_SLUG}-test
           cache-from: test:${GLOBAL_DOCKER_REGISTRY}/build-cache:${BUILDKITE_PIPELINE_SLUG}-test
